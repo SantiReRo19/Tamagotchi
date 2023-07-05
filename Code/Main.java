@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import Controller.ControladorTamagotchi;
 import Model.Tamagotchi;
 
 public class Main {
@@ -11,6 +12,7 @@ public class Main {
         Thread tamagotchiThread = new Thread(tamagotchi);
         tamagotchiThread.start();
         
+
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         try {

@@ -1,12 +1,19 @@
 package Model;
+import Controller.ControladorTamagotchi;
+
 
 public class Tamagotchi implements Runnable {
+    ControladorTamagotchi controlador;
 
     protected int hambre;
     protected int felicidad;
     protected int suciedad;
     protected int energia;
     protected int nivel;
+    private int cant_BuenaAtencion;
+
+    
+
 
     public Tamagotchi() {
         hambre = 0;
@@ -14,6 +21,7 @@ public class Tamagotchi implements Runnable {
         suciedad = 0;
         energia = 100;
         nivel = 1;
+        cant_BuenaAtencion = 0;
     }
     boolean ActivacionRun = true;
     //Hilo que ejecura el ciclo de desgaste del tamagotchi en base de 2 segundos
@@ -25,6 +33,7 @@ public class Tamagotchi implements Runnable {
 
             limitarRango(hambre);
             AdvMalaAtencion();
+            if(nivel < 10){SubirNivel();}
             
             hambre += 2;
             felicidad -= 1;
@@ -41,7 +50,7 @@ public class Tamagotchi implements Runnable {
             vidaTamagotchi();
 
             try {
-                Thread.sleep(2000);//Cada 2 segundos ejecuta el run
+                Thread.sleep(1000);//Cada 2 segundos ejecuta el run
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -68,6 +77,7 @@ public class Tamagotchi implements Runnable {
         limitarRango(felicidad);
         limitarRango(suciedad); 
         limitarRango(energia);
+        cant_BuenaAtencion += 1;
 
     }
 
@@ -80,6 +90,8 @@ public class Tamagotchi implements Runnable {
         felicidad = limitarRango(felicidad); 
         suciedad = limitarRango(suciedad);
         energia = limitarRango(energia);
+        cant_BuenaAtencion += 1;
+
        
     }
 
@@ -92,6 +104,7 @@ public class Tamagotchi implements Runnable {
         felicidad = limitarRango(felicidad); 
         suciedad = limitarRango(suciedad);
         energia = limitarRango(energia);
+        cant_BuenaAtencion += 1;
     }
 
     public void dormir() {
@@ -102,24 +115,27 @@ public class Tamagotchi implements Runnable {
         felicidad = limitarRango(felicidad); 
         suciedad = limitarRango(suciedad);
         energia = limitarRango(energia);
+        cant_BuenaAtencion += 1;
         
     }
 
-    //Metodo que Advertencia de Mala Atención
+    //Metodo que le avisa al modelo que hay una Advertencia de Mala Atención
+    //Y la muestre en la ventana
     private void AdvMalaAtencion() {
         if (hambre > 80) {
-            System.out.println("¡El Tamagotchi tiene mucha hambre!");
+            controlador.AdvMalaAtencion("Hambre");
         }
         if (felicidad < 20) {
-            System.out.println("¡El Tamagotchi está muy triste!");
+            controlador.AdvMalaAtencion("felicidad");
         }
         if (suciedad > 80) {
-            System.out.println("¡El Tamagotchi está muy sucio!");
+            controlador.AdvMalaAtencion("suciedad");
         }
         if (energia < 20) {
-            System.out.println("¡El Tamagotchi está agotado!");
+            controlador.AdvMalaAtencion("energia");
         }
     }
+
 
     //Metodo que limita el rango de los valores de los atributos(hambre, suciedad, felicidad, sueño)
     public static int limitarRango(int valor) {
@@ -136,6 +152,23 @@ public class Tamagotchi implements Runnable {
         if(hambre == 100 || felicidad == 0 || suciedad == 100 || energia == 0) {
             System.out.println("\n¡El Tamagotchi ha muerto!");
             ActivacionRun = false;
+        }
+    }
+
+    public void SubirNivel() {
+        controlador = new ControladorTamagotchi();
+
+        if(cant_BuenaAtencion == 10) { 
+            nivel += 1;
+            cant_BuenaAtencion = 0;
+            System.out.println("\nEl Tamagotchi ha subido el nivel " + nivel);
+            //Codigo que llama al controlador para que muestre el nuevo tamagotchi
+            String gif = "Hola";
+            controlador.metodoControlador(gif);
+    
+            if(nivel == 10) {
+                System.out.println("\n***El Tamagotchi ha alcanzado el maximo nivel ***");
+            }
         }
     }
 }
