@@ -1,5 +1,8 @@
 package Controller;
 
-public class ControladorTamagotchi {
+import Model.Tamagotchi;
+
+public class ControladorTamagotchi extends Tamagotchi{
+    
     
 }

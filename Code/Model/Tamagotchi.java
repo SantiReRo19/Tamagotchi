@@ -1,144 +1,119 @@
 package Model;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 
 public class Tamagotchi implements Runnable {
 
-    private int hambre;
-    private int felicidad;
-    private int suciedad;
-    private int energia;
-    private int nivel;
+    protected int hambre;
+    protected int felicidad;
+    protected int suciedad;
+    protected int energia;
+    protected int nivel;
 
     public Tamagotchi() {
-        hambre = 100;
+        hambre = 0;
         felicidad = 100;
-        suciedad = 100;
+        suciedad = 0;
         energia = 100;
         nivel = 1;
     }
-
-    boolean activate = true;
-    boolean alimentando = false;
-
+    boolean ActivacionRun = true;
+    //Hilo que ejecura el ciclo de desgaste del tamagotchi en base de 2 segundos
     @Override
     public void run() {
-        while (true) {
-            if(!alimentando) {
-            clearScreen();
-            mostrarEstado();
-            comprobarEstadosBajos();
-            /* 
-            switch (nivel) {
-                case 1:
-                    tamagotchiNormal();
-                    break;
-                case 2:
-                    tamagotchiComiendo();
-                    System.out.println("Hola");
-                    break;
-                case 3:
-                    tamagotchiDurmiendo();
-                    break;
-                case 4:
-                    tamagotchiJugando();
-                    break;
-                case 5:
-                    tamagotchiSucio();
-                    break;
-            }
-            */
-            tamagotchiNormal1();
+        while (true) { //While para que se ejecute el hilo indefinidamente(USADO PARA PRUEBA)
+        System.out.println("Entre al ciclo");
+        while (ActivacionRun) {
 
-            hambre -= 2;
+            limitarRango(hambre);
+            AdvMalaAtencion();
+            
+            hambre += 2;
             felicidad -= 1;
-            suciedad -= 1;
+            suciedad += 1;
             energia -= 3;
 
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            clearScreen();
-            mostrarEstado();
-            comprobarEstadosBajos();
-            tamagotchiNormal2();
+            hambre = limitarRango(hambre);
+            felicidad = limitarRango(felicidad); 
+            suciedad = limitarRango(suciedad);
+            energia = limitarRango(energia);
 
-            hambre -= 2;
-            felicidad -= 1;
-            suciedad -= 1;
-            energia -= 3;
+            System.out.println(hambre + " " + felicidad + " " + suciedad + " " + energia + " " );
+
+            vidaTamagotchi();
 
             try {
-                Thread.sleep(1000);
+                Thread.sleep(2000);//Cada 2 segundos ejecuta el run
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             
-        }}
+        }
+        try {
+                Thread.sleep(3000);//Cada 3 segundos ejecuta el ciclo para evitar que el hilo termine
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
+    //Metodos que realizan las Actividades del Tamagotchi, alteran sus variables 
+    //y evita que sobre pasen el umbral determinado de 0 a 100
     public void alimentar() {
-        //activate = false;
-        alimentando =true;
-        hambre += 20;
-        felicidad += 10;
+        System.out.println("Alimente");
+        ActivacionRun = true;//Revivir al Tamagotchi(PARA PRUEBAS)
+        hambre -= 20;
+        felicidad += 5;
         suciedad += 5;
-        energia += 5;
-        clearScreen();
-        mostrarEstado();
-        comprobarEstadosBajos();
-        comprobarEstadosAltos();
-        tamagotchiComiendo();
-        //activate = true;
+        energia -= 5;
+        limitarRango(hambre);
+        limitarRango(felicidad);
+        limitarRango(suciedad); 
+        limitarRango(energia);
 
-        try {
-            Thread.sleep(2000); // Detener el hilo durante 2 segundos
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        alimentando = false;
-        
-        
     }
 
     public void entrenar() {
-        hambre += 10;
+        hambre += 5;
         felicidad += 15;
-        suciedad += 5;
-        energia -= 2;
-        comprobarEstadosAltos();
-        tamagotchiJugando();
+        suciedad += 1;
+        energia -= 8;
+        hambre = limitarRango(hambre);
+        felicidad = limitarRango(felicidad); 
+        suciedad = limitarRango(suciedad);
+        energia = limitarRango(energia);
+       
     }
 
     public void banar() {
-        hambre += 5;
-        felicidad += 5;
-        suciedad += 10;
-        energia += 5;
-        comprobarEstadosAltos();
-        tamagotchiSucio();
+        
+        felicidad += 8;
+        suciedad -= 15;
+        energia += 1;
+        hambre = limitarRango(hambre);
+        felicidad = limitarRango(felicidad); 
+        suciedad = limitarRango(suciedad);
+        energia = limitarRango(energia);
     }
 
     public void dormir() {
-        hambre += 10;
+        hambre += 2;
         felicidad += 10;
-        suciedad += 5;
-        energia += 30;
-        comprobarEstadosAltos();
-        tamagotchiDurmiendo();
+        energia += 20;
+        hambre = limitarRango(hambre);
+        felicidad = limitarRango(felicidad); 
+        suciedad = limitarRango(suciedad);
+        energia = limitarRango(energia);
+        
     }
 
-    private void comprobarEstadosBajos() {
-        if (hambre < 20) {
+    //Metodo que Advertencia de Mala Atención
+    private void AdvMalaAtencion() {
+        if (hambre > 80) {
             System.out.println("¡El Tamagotchi tiene mucha hambre!");
         }
         if (felicidad < 20) {
             System.out.println("¡El Tamagotchi está muy triste!");
         }
-        if (suciedad < 20) {
+        if (suciedad > 80) {
             System.out.println("¡El Tamagotchi está muy sucio!");
         }
         if (energia < 20) {
@@ -146,112 +121,21 @@ public class Tamagotchi implements Runnable {
         }
     }
 
-    private void comprobarEstadosAltos() {
-        if (hambre > 100 ) {
-            hambre = 100;
-        }if(hambre < 0) {
-            hambre = 0;
-        }
-        if (felicidad > 100) {
-            felicidad = 100;
-        }if(felicidad < 0) {
-            felicidad = 0;
-        }
-        if (suciedad > 100) {
-            suciedad = 100;
-        }if(suciedad < 0) {
-            suciedad = 0;
-        }
-        if (energia > 100) {
-            energia = 100;
-        }if(energia < 0) {
-            energia = 0;
-        }
+    //Metodo que limita el rango de los valores de los atributos(hambre, suciedad, felicidad, sueño)
+    public static int limitarRango(int valor) {
+        if (valor<0) {
+            return valor = 0;}
+        if (valor>100) {
+            return valor = 100;}
+        else{return valor;}
+        
     }
 
-    private void mostrarEstado() {
-        System.out.println("Estado del Tamagotchi:");
-        System.out.println("Nivel: " + nivel);
-        System.out.println("Hambre: " + hambre);
-        System.out.println("Felicidad: " + felicidad);
-        System.out.println("Suciedad: " + suciedad);
-        System.out.println("Energía: " + energia);
-        System.out.println("------------------------");
-    }
-
-    public void tamagotchiNormal1() {
-        System.out.println("  /\\_/\\");
-        System.out.println(" ( o.o )");
-        System.out.println("  > ^ <");
-    }
-    public void tamagotchiNormal2() {
-        System.out.println("  /\\_/\\");
-        System.out.println(" ( -.- )");
-        System.out.println("  > ^ <");
-    }
-
-    public void tamagotchiComiendo() {
-        System.out.println("  /\\_/\\");
-        System.out.println(" ( -o- )");
-        System.out.println("  >   <_/0");
-        System.out.println("¡El Tamagotchi está comiendo!");
-    }
-
-    public void tamagotchiDurmiendo() {
-        System.out.println("  /\\_/\\");
-        System.out.println(" ( -.- )");
-        System.out.println("  > ^ <");
-        System.out.println("¡El Tamagotchi está durmiendo!");
-    }
-
-    public void tamagotchiJugando() {
-        System.out.println("  /\\_/\\");
-        System.out.println(" ( ^◡^ )");
-        System.out.println("  > ^ <");
-        System.out.println("¡El Tamagotchi está jugando!");
-    }
-
-    public void tamagotchiSucio() {
-        System.out.println("  /\\_/\\");
-        System.out.println(" ( @.@ )");
-        System.out.println("  > ^ <");
-        System.out.println("¡El Tamagotchi está sucio!");
-    }
-
-    public static void clearScreen() {
-        try {
-            if (System.getProperty("os.name").contains("Windows")) {
-                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
-            } else {
-                System.out.print("\033[H\033[2J");
-                System.out.flush();
-            }
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        Tamagotchi tamagotchi = new Tamagotchi();
-        Thread tamagotchiThread = new Thread(tamagotchi);
-        tamagotchiThread.start();
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            while (true) {
-                String input = reader.readLine();
-                if (input.equalsIgnoreCase("a")) {
-                    tamagotchi.alimentar();
-                } else if (input.equalsIgnoreCase("e")) {
-                    tamagotchi.entrenar();
-                } else if (input.equalsIgnoreCase("b")) {
-                    tamagotchi.banar();
-                } else if (input.equalsIgnoreCase("d")) {
-                    tamagotchi.dormir();
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    //Metodo que calcula si el tamagotchi está vivo, si no lo está detiene el Hilo
+    public void vidaTamagotchi() {
+        if(hambre == 100 || felicidad == 0 || suciedad == 100 || energia == 0) {
+            System.out.println("\n¡El Tamagotchi ha muerto!");
+            ActivacionRun = false;
         }
     }
 }
