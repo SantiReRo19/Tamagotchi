@@ -1,13 +1,18 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
-import Controller.ControladorTamagotchi;
 import Model.Tamagotchi;
+import View.VentanaInicio;
 
 public class Main {
     
     public static void main(String[] args) {
+
+        new VentanaInicio();
+    
+
+
+        /* 
         Tamagotchi tamagotchi = new Tamagotchi();
         Thread tamagotchiThread = new Thread(tamagotchi);
         tamagotchiThread.start();
@@ -31,5 +36,6 @@ public class Main {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
     }
 }
