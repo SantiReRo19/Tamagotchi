@@ -1,8 +1,13 @@
 package Model;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import Controller.ControladorTamagotchi;
 
 
-public class Tamagotchi implements Runnable {
+public class Tamagotchi implements Runnable, Serializable {
     ControladorTamagotchi controlador;
 
     protected int hambre;
@@ -171,4 +176,51 @@ public class Tamagotchi implements Runnable {
             }
         }
     }
+
+        public void guardarEstado(String archivo) {
+        try {
+            FileOutputStream fileOut = new FileOutputStream(archivo);
+            ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            out.writeObject(this);
+            out.close();
+            fileOut.close();
+            System.out.println("Estado del Tamagotchi guardado en " + archivo);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public Tamagotchi cargarEstado(String archivo) {
+        try {
+            FileInputStream fileIn = new FileInputStream(archivo);
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            Tamagotchi tamagotchi = (Tamagotchi) in.readObject();
+            in.close();
+            fileIn.close();
+            System.out.println("Estado del Tamagotchi cargado desde " + archivo);
+            System.out.println("Hambre: " + tamagotchi.getHambre());
+            System.out.println("Felicidad: " + tamagotchi.getFelicidad());
+            System.out.println("Suciedad: " + tamagotchi.getSuciedad());
+            System.out.println("Energia: " + tamagotchi.getEnergia());
+            return tamagotchi;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+    public int getHambre() {
+    	return hambre;
+    }
+    public int getFelicidad() {
+    	return felicidad;
+    }
+    public int getSuciedad() {
+    	return suciedad;
+    }
+    public int getEnergia() {
+    	return energia;
+    }
+    
 }
+
+
