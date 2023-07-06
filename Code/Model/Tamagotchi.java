@@ -8,7 +8,7 @@ import Controller.ControladorTamagotchi;
 
 
 public class Tamagotchi implements Runnable, Serializable {
-    ControladorTamagotchi controlador;
+    //ControladorTamagotchi controlador;
 
     protected int hambre;
     protected int felicidad;
@@ -96,7 +96,6 @@ public class Tamagotchi implements Runnable, Serializable {
         suciedad = limitarRango(suciedad);
         energia = limitarRango(energia);
         cant_BuenaAtencion += 1;
-
        
     }
 
@@ -128,16 +127,16 @@ public class Tamagotchi implements Runnable, Serializable {
     //Y la muestre en la ventana
     private void AdvMalaAtencion() {
         if (hambre > 80) {
-            controlador.AdvMalaAtencion("Hambre");
+            //controlador.AdvMalaAtencion("Hambre");
         }
         if (felicidad < 20) {
-            controlador.AdvMalaAtencion("felicidad");
+            //controlador.AdvMalaAtencion("felicidad");
         }
         if (suciedad > 80) {
-            controlador.AdvMalaAtencion("suciedad");
+            //controlador.AdvMalaAtencion("suciedad");
         }
         if (energia < 20) {
-            controlador.AdvMalaAtencion("energia");
+            //controlador.AdvMalaAtencion("energia");
         }
     }
 
@@ -161,7 +160,7 @@ public class Tamagotchi implements Runnable, Serializable {
     }
 
     public void SubirNivel() {
-        controlador = new ControladorTamagotchi();
+        //controlador = new ControladorTamagotchi();
 
         if(cant_BuenaAtencion == 10) { 
             nivel += 1;
@@ -169,7 +168,7 @@ public class Tamagotchi implements Runnable, Serializable {
             System.out.println("\nEl Tamagotchi ha subido el nivel " + nivel);
             //Codigo que llama al controlador para que muestre el nuevo tamagotchi
             String gif = "Hola";
-            controlador.metodoControlador(gif);
+            //controlador.metodoControlador(gif);
     
             if(nivel == 10) {
                 System.out.println("\n***El Tamagotchi ha alcanzado el maximo nivel ***");
