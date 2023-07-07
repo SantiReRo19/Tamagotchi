@@ -19,7 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.nio.file.Path;
-            import java.nio.file.Paths;
+import java.nio.file.Paths;
 
 public class VentanaInicio extends JFrame implements ActionListener {
 
