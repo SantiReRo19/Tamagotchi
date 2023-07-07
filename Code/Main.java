@@ -10,8 +10,7 @@ public class Main  {
 
         new VentanaInicio();
 
-        /* 
-    	Tamagotchi tamagotchi = new Tamagotchi();
+    	/*Tamagotchi tamagotchi = new Tamagotchi();
     	
     	String nombreArchivo = "C:\\Users\\santi\\OneDrive\\Documentos\\Proyectos Programacion\\Tamagotchi\\Recursos\\partidas\\partida1.bin";
     
@@ -41,9 +40,6 @@ public class Main  {
         } catch (IOException e) {
             e.printStackTrace();
         }
-       //tamagotchi.guardarEstado(nombreArchivo);
-        */
-
-		
+    }*/
     }
 }
