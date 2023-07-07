@@ -4,7 +4,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class ControladorTamagotchi {
-
+    // --------------------------------
     // Obtén la ruta absoluta del proyecto
     Path projectPath = Paths.get("").toAbsolutePath();
 
