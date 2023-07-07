@@ -43,7 +43,6 @@ public class Main  {
         }
        //tamagotchi.guardarEstado(nombreArchivo);
         */
-
-		
+        
     }
 }
