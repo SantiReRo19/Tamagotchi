@@ -9,6 +9,9 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import Controller.ControladorTamagotchi;
+import Model.Autoguardado;
+import Model.Tamagotchi;
+
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,7 +22,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.nio.file.Path;
-            import java.nio.file.Paths;
+import java.nio.file.Paths;
 
 public class VentanaInicio extends JFrame implements ActionListener {
 
@@ -38,15 +41,29 @@ public class VentanaInicio extends JFrame implements ActionListener {
 
     Color comparacion, ColorFondo, ColorFuente,ColorFondo2, ColorBoton1;
 
-
+    
     ControladorTamagotchi controlador;
+    Tamagotchi tamagotchi = new Tamagotchi();
+    transient Thread Hilo;
+    VentanaInicio ventInicio;
     int a;
+    int num_partida = 0;
 
     JButton bjugar = new JButton("Jugar");
-    public VentanaInicio cara;
+    
 
     public VentanaInicio() {
         VentInicio();
+        
+            // Resto del código...
+        controlador = new ControladorTamagotchi(this);
+        
+    }
+
+    public VentanaInicio(Tamagotchi tamagotchi,Thread Hilo, ControladorTamagotchi controlador) {
+        this.tamagotchi = tamagotchi;
+        this.Hilo = Hilo;
+        this.controlador = controlador;
     }
 
     public void VentInicio(){
@@ -139,7 +156,7 @@ public class VentanaInicio extends JFrame implements ActionListener {
         hambre.setBounds(45, 65, 100, 20);
         hambre.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
 
-        iHambre = new JLabel("");
+        iHambre = new JLabel();
         iHambre.setBounds(120, 65, 100, 20);
         iHambre.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
 
@@ -260,6 +277,26 @@ public class VentanaInicio extends JFrame implements ActionListener {
         VentanaTag.setLocationRelativeTo(null);
         VentanaTag.setVisible(true);
 
+
+    }
+
+    public void setiHambre(String a) {
+        iHambre.setText(a);
+    }
+
+    public void setiSuciedad(String a) {
+        iSuciedad.setText("");
+        iSuciedad.setText(a);
+    }
+
+    public void setiSueno(String a) {
+        iSueno.setText(a);
+    }
+    public void setiEntrenamiento(String a) {
+        iEntrenamiento.setText(a);
+    }
+    public void setNivel(String a) {
+        nivel.setText(a);
     }
 
     private Color getNextColor() {
@@ -280,15 +317,15 @@ public class VentanaInicio extends JFrame implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-
+        
         controlador = new ControladorTamagotchi();
       
         JButton bPress = (JButton) e.getSource();
         if (bPress == bjugar) {
             VentanaIni.setVisible(false);
-            //acá
-
+        
             if (contadorlistener == 1) {
+
                 System.out.println(contadorlistener);
                 //acá se debe implementar la segunda partida
                 int opcion = JOptionPane.showOptionDialog(
@@ -300,17 +337,52 @@ public class VentanaInicio extends JFrame implements ActionListener {
                 null, // Icono personalizado (null para el icono predeterminado)
                 new Object[]{"Nueva partida", "Cargar Partida", "Cancelar"}/*Texto de los botones */,"Si"/*Botón predeterminado */);
 
-                System.out.println("llegamos al contador ==1");
+                System.out.println("llegamos al contador ==1\n");
                 VentanaTag.setVisible(true);
 
                 // Comprobar la opción seleccionada
                 if (opcion == JOptionPane.YES_OPTION) {
                     System.out.println("Se seleccionó nueva partida");
+
+
+                    controlador = new ControladorTamagotchi(this);
+                    tamagotchi = new Tamagotchi(controlador);
+                    Hilo = new Thread(tamagotchi);
+                
+                    tamagotchi.IniciarTamagotchi(tamagotchi,Hilo, controlador);
+                    
+                    
+                    num_partida = 2;
                     contadorlistener++;
-                    // Realizar las acciones
+                    Hilo.start();
+
+
+                    
+
                 } else if (opcion == JOptionPane.NO_OPTION) {
+                    num_partida = 1;
                     System.out.println("Se seleccionó cargar partida");
-                    // Realizar las acciones
+
+                    ControladorTamagotchi controlador = new ControladorTamagotchi();
+                    tamagotchi = new Tamagotchi();
+                    
+                    String nombreArchivo = controlador.getPartida1();
+
+                    Autoguardado autoguardado = new Autoguardado(tamagotchi); 
+                
+                    tamagotchi = autoguardado.cargarEstado(nombreArchivo);
+                    autoguardado = new Autoguardado(tamagotchi);
+                    //autoguardado.start();
+                    
+                    tamagotchi.setActivacionRun(true);
+                    Thread Hilo = new Thread(tamagotchi);
+                    
+                    tamagotchi.IniciarTamagotchi(tamagotchi,Hilo,this.controlador );
+
+                    Hilo.start();
+                    
+                
+                    
                 } else if (opcion == JOptionPane.CANCEL_OPTION) {
                     System.out.println("Se seleccionó Cancelar");
                     VentanaTag.setVisible(false);
@@ -321,9 +393,23 @@ public class VentanaInicio extends JFrame implements ActionListener {
                     // Realizar acciones cuando se cierra el cuadro de diálogo sin seleccionar ninguna opción
                 }
             } else if (contadorlistener == 0) {
+                
                 //primera partida
+                controlador = new ControladorTamagotchi(this);
+                tamagotchi = new Tamagotchi(controlador);
+                Hilo = new Thread(tamagotchi);
+                
+                tamagotchi.IniciarTamagotchi(tamagotchi,Hilo, controlador);
+                
+                
+
+                num_partida = 1;
                 VentPrincipal();
-                System.out.println("hello papu");
+                Hilo.start();
+
+                
+
+                System.out.println("Nueva Partida");
                 contadorlistener++;
             }else if(contadorlistener > 1){
                 System.out.println("llegamos al contador >1");
@@ -342,9 +428,48 @@ public class VentanaInicio extends JFrame implements ActionListener {
                 // Comprobar la opción seleccionada
                 if (opcion == JOptionPane.YES_OPTION) {
                     System.out.println("Se seleccionó cargar partida 1");
-                    // Realizar las acciones
+
+                    num_partida = 1;
+
+                    ControladorTamagotchi controlador = new ControladorTamagotchi();
+                    tamagotchi = new Tamagotchi();
+                    
+                    String nombreArchivo = controlador.getPartida1();
+
+                    Autoguardado autoguardado = new Autoguardado(tamagotchi); 
+                
+                    tamagotchi = autoguardado.cargarEstado(nombreArchivo);
+                    autoguardado = new Autoguardado(tamagotchi);
+                    //autoguardado.start();
+                    
+                    tamagotchi.setActivacionRun(true);
+                    Thread Hilo = new Thread(tamagotchi);
+                    Hilo.start();
+                    tamagotchi.IniciarTamagotchi(tamagotchi,Hilo,this.controlador);
+
+                    
                 } else if (opcion == JOptionPane.NO_OPTION) {
                     System.out.println("Se seleccionó cargar partida 2");
+
+                    num_partida = 2;
+
+                    ControladorTamagotchi controlador = new ControladorTamagotchi();
+                    tamagotchi = new Tamagotchi();
+                    
+                    String nombreArchivo = controlador.getPartida2();
+
+                    Autoguardado autoguardado = new Autoguardado(tamagotchi); 
+                
+                    tamagotchi = autoguardado.cargarEstado(nombreArchivo);
+                    autoguardado = new Autoguardado(tamagotchi);
+                    //autoguardado.start();
+                    
+                    tamagotchi.setActivacionRun(true);
+                    Thread Hilo = new Thread(tamagotchi);
+                    Hilo.start();
+                    tamagotchi.IniciarTamagotchi(tamagotchi,Hilo,this.controlador);
+
+
                     // Realizar las acciones
                 } else if (opcion == JOptionPane.CANCEL_OPTION) {
                     System.out.println("Se seleccionó Cancelar");
@@ -363,6 +488,8 @@ public class VentanaInicio extends JFrame implements ActionListener {
             gifLabel.setBounds(0, 0, 400, 300);
             panelAnima.add(gifLabel);
             panelAnima.repaint();
+
+            tamagotchi.alimentar();
         } else if (bPress == dormir) {
             panelAnima.removeAll();
             ImageIcon gifIcon = new ImageIcon(controlador.getGIF("dormir"));
@@ -370,6 +497,8 @@ public class VentanaInicio extends JFrame implements ActionListener {
             gifLabel.setBounds(0, 0, 400, 300);
             panelAnima.add(gifLabel);
             panelAnima.repaint();
+
+            tamagotchi.dormir();
         } else if (bPress == entrenar) {
             panelAnima.removeAll();
             ImageIcon gifIcon = new ImageIcon(controlador.getGIF("entrenar"));
@@ -377,6 +506,8 @@ public class VentanaInicio extends JFrame implements ActionListener {
             gifLabel.setBounds(0, 0, 400, 300);
             panelAnima.add(gifLabel);
             panelAnima.repaint();
+
+            tamagotchi.entrenar();
         } else if (bPress == banar) {
             panelAnima.removeAll();
             ImageIcon gifIcon = new ImageIcon(controlador.getGIF("banar"));
@@ -384,18 +515,34 @@ public class VentanaInicio extends JFrame implements ActionListener {
             gifLabel.setBounds(0, 0, 400, 300);
             panelAnima.add(gifLabel);
             panelAnima.repaint();
+
+            tamagotchi.banar();
         } else if (bPress == volver) {
+            tamagotchi.IniciarTamagotchi(tamagotchi, Hilo,this.controlador);
+            //controlador = new ControladorTamagotchi(this);
+            Autoguardado autoguardado = new Autoguardado(tamagotchi);
+            
+            
             panelAnima.removeAll();
             // Crea el ImageIcon con la ruta completa del archivo
             ImageIcon gifIcon = new ImageIcon(controlador.getGIF("saludo"));//gif Saludo
             JLabel gifLabel = new JLabel(gifIcon);
             gifLabel.setBounds(0, 0, 400, 300);
             panelAnima.add(gifLabel);
-
-
+            
+            
+            if(num_partida == 1) {
+                String nombreArchivo = controlador.getPartida1();
+                autoguardado.guardarEstado(nombreArchivo);
+            }else if(num_partida == 2) {
+                String nombreArchivo = controlador.getPartida2();
+                autoguardado.guardarEstado(nombreArchivo);
+            }
+            tamagotchi.setActivacionRun(false);
             panelAnima.repaint();
             VentanaTag.setVisible(false);
             VentanaIni.setVisible(true);
+
         }
 
     }

@@ -5,20 +5,20 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import Controller.ControladorTamagotchi;
+import View.VentanaInicio;
 
 
 public class Tamagotchi implements Runnable, Serializable {
     //ControladorTamagotchi controlador;
-
+    private Tamagotchi tamagotchi;
+    VentanaInicio ventana; 
+    ControladorTamagotchi controlador;
     protected int hambre;
     protected int felicidad;
     protected int suciedad;
     protected int energia;
     protected int nivel;
     private int cant_BuenaAtencion;
-
-    
-
 
     public Tamagotchi() {
         hambre = 0;
@@ -28,17 +28,32 @@ public class Tamagotchi implements Runnable, Serializable {
         nivel = 1;
         cant_BuenaAtencion = 0;
     }
+
+    public Tamagotchi(Tamagotchi tamagotchi) {
+        this.tamagotchi = tamagotchi;
+    }
+
+    public Tamagotchi(ControladorTamagotchi controladorcito) {
+        this.controlador = controladorcito;
+        hambre = 0;
+        felicidad = 100;
+        suciedad = 0;
+        energia = 100;
+        nivel = 1;
+        cant_BuenaAtencion = 0;
+    }
+
     boolean ActivacionRun = true;
     //Hilo que ejecura el ciclo de desgaste del tamagotchi en base de 2 segundos
     @Override
     public void run() {
-        while (true) { //While para que se ejecute el hilo indefinidamente(USADO PARA PRUEBA)
-        System.out.println("Entre al ciclo");
+        
         while (ActivacionRun) {
 
             limitarRango(hambre);
             AdvMalaAtencion();
-            if(nivel < 10){SubirNivel();}
+            
+            if(nivel < 10 ){SubirNivel();}
             
             hambre += 2;
             felicidad -= 1;
@@ -50,7 +65,13 @@ public class Tamagotchi implements Runnable, Serializable {
             suciedad = limitarRango(suciedad);
             energia = limitarRango(energia);
 
-            System.out.println(hambre + " " + felicidad + " " + suciedad + " " + energia + " " );
+            System.out.println(hambre + " " + felicidad + " "
+             + suciedad + " " + energia + " " );
+             
+            controlador.setEnergia(energia);
+            controlador.setFelicidad(felicidad);
+            controlador.setSuciedad(suciedad);
+            controlador.setHambre(hambre);
 
             vidaTamagotchi();
 
@@ -66,7 +87,7 @@ public class Tamagotchi implements Runnable, Serializable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
+        
     }
 
     //Metodos que realizan las Actividades del Tamagotchi, alteran sus variables 
@@ -161,13 +182,13 @@ public class Tamagotchi implements Runnable, Serializable {
 
     public void SubirNivel() {
         //controlador = new ControladorTamagotchi();
-
+        controlador.setNivel(nivel);
         if(cant_BuenaAtencion == 10) { 
             nivel += 1;
             cant_BuenaAtencion = 0;
             System.out.println("\nEl Tamagotchi ha subido el nivel " + nivel);
             //Codigo que llama al controlador para que muestre el nuevo tamagotchi
-            String gif = "Hola";
+            controlador.setNivel(nivel);
             //controlador.metodoControlador(gif);
     
             if(nivel == 10) {
@@ -176,7 +197,7 @@ public class Tamagotchi implements Runnable, Serializable {
         }
     }
 
-        public void guardarEstado(String archivo) {
+    public void guardarEstado(String archivo) {
         try {
             FileOutputStream fileOut = new FileOutputStream(archivo);
             ObjectOutputStream out = new ObjectOutputStream(fileOut);
@@ -189,24 +210,16 @@ public class Tamagotchi implements Runnable, Serializable {
         }
     }
     
-    public Tamagotchi cargarEstado(String archivo) {
-        try {
-            FileInputStream fileIn = new FileInputStream(archivo);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-            Tamagotchi tamagotchi = (Tamagotchi) in.readObject();
-            in.close();
-            fileIn.close();
-            System.out.println("Estado del Tamagotchi cargado desde " + archivo);
-            System.out.println("Hambre: " + tamagotchi.getHambre());
-            System.out.println("Felicidad: " + tamagotchi.getFelicidad());
-            System.out.println("Suciedad: " + tamagotchi.getSuciedad());
-            System.out.println("Energia: " + tamagotchi.getEnergia());
-            return tamagotchi;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+    public void IniciarTamagotchi(Tamagotchi tamagotchi, Thread tamagotchiThread, ControladorTamagotchi controlador){
+        
+        //Autoguardado autoguardado = new Autoguardado(tamagotchi);
+        //autoguardado.start();
+        
+        new VentanaInicio(tamagotchi,tamagotchiThread,controlador);
+        
     }
+    
+
     public int getHambre() {
     	return hambre;
     }
@@ -219,7 +232,9 @@ public class Tamagotchi implements Runnable, Serializable {
     public int getEnergia() {
     	return energia;
     }
-    
+    public void setActivacionRun(boolean activacionRun) {
+        ActivacionRun = activacionRun;
+    }
 }
 
 
