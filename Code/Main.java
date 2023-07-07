@@ -40,8 +40,5 @@ public class Main  {
         } catch (IOException e) {
             e.printStackTrace();
         }
-       tamagotchi.guardarEstado(nombreArchivo);*/
 
-		
-    }
 }

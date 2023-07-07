@@ -9,13 +9,17 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import Controller.ControladorTamagotchi;
-
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.nio.file.Path;
+            import java.nio.file.Paths;
 
 public class VentanaInicio extends JFrame implements ActionListener {
 
@@ -43,7 +47,9 @@ public class VentanaInicio extends JFrame implements ActionListener {
         VentInicio();
     }
 
-    public void VentInicio() {
+    public void VentInicio(){
+        controlador = new ControladorTamagotchi();
+
         VentanaIni.setTitle("Tamagotchi");
         VentanaIni.setVisible(true);
         VentanaIni.setSize(500, 580);
@@ -60,9 +66,9 @@ public class VentanaInicio extends JFrame implements ActionListener {
         panel2.setBounds(0, 70, 500, 413);
         panel2.setBackground(new java.awt.Color(249, 243, 255));
         panel2.setLayout(null);
-        ImageIcon gifIncial = new ImageIcon(
-                "D:\\documentos\\Tercer semestre U\\Programaci\u00F3n\\Miniproyecto4\\Tamagotchi\\Recursos\\Assets\\Saludo.gif");
-        JLabel giflabelInicial = new JLabel(gifIncial);
+
+        ImageIcon gifInicial = new ImageIcon(controlador.getGIF("saludo"));
+        JLabel giflabelInicial = new JLabel(gifInicial);
         giflabelInicial.setBounds(0, 0, 498, 413);
         panel2.add(giflabelInicial);
         VentanaIni.add(panel2);
@@ -106,8 +112,10 @@ public class VentanaInicio extends JFrame implements ActionListener {
     }
 
     public void VentPrincipal() {
-
+        controlador = new ControladorTamagotchi();
+      
         ColorFondo = new Color(252, 249, 221);// 242, 239, 244
+        
         ColorFuente = new Color(59, 59, 76);
         ColorFondo2 = new Color(254, 245, 130);
         ColorBoton1 = new Color(233, 187, 55);
@@ -150,8 +158,8 @@ public class VentanaInicio extends JFrame implements ActionListener {
         panelAnima.setLayout(null);
         panelAnima.setBackground(ColorFondo2);
 
-        ImageIcon gifIcon = new ImageIcon(
-                "D:\\documentos\\Tercer semestre U\\Programaci\u00F3n\\Miniproyecto4\\Tamagotchi\\Recursos\\Assets\\Saludo.gif");
+
+        ImageIcon gifIcon = new ImageIcon(controlador.getGIF("saludo"));
         JLabel gifLabel = new JLabel(gifIcon);
         gifLabel.setBounds(0, 0, 400, 300);
 
@@ -246,6 +254,8 @@ public class VentanaInicio extends JFrame implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
 
+        controlador = new ControladorTamagotchi();
+      
         JButton bPress = (JButton) e.getSource();
         if (bPress == bjugar) {
             VentanaIni.setVisible(false);
@@ -321,47 +331,44 @@ public class VentanaInicio extends JFrame implements ActionListener {
 
         } else if (bPress == comer) {
             panelAnima.removeAll();
-            ImageIcon gifIcon = new ImageIcon(
-                    "D:\\documentos\\Tercer semestre U\\Programaci\u00F3n\\Miniproyecto4\\Tamagotchi\\Recursos\\Assets\\Comer.gif");
+            ImageIcon gifIcon = new ImageIcon(controlador.getGIF("comer"));
             JLabel gifLabel = new JLabel(gifIcon);
             gifLabel.setBounds(0, 0, 400, 300);
             panelAnima.add(gifLabel);
             panelAnima.repaint();
         } else if (bPress == dormir) {
             panelAnima.removeAll();
-            ImageIcon gifIcon = new ImageIcon(
-                    "D:\\documentos\\Tercer semestre U\\Programaci\u00F3n\\Miniproyecto4\\Tamagotchi\\Recursos\\Assets\\Dormir.gif");
+            ImageIcon gifIcon = new ImageIcon(controlador.getGIF("dormir"));
             JLabel gifLabel = new JLabel(gifIcon);
             gifLabel.setBounds(0, 0, 400, 300);
             panelAnima.add(gifLabel);
             panelAnima.repaint();
         } else if (bPress == entrenar) {
             panelAnima.removeAll();
-            ImageIcon gifIcon = new ImageIcon(
-                    "D:\\documentos\\Tercer semestre U\\Programaci\u00F3n\\Miniproyecto4\\Tamagotchi\\Recursos\\Assets\\Entrenar.gif");
+            ImageIcon gifIcon = new ImageIcon(controlador.getGIF("entrenar"));
             JLabel gifLabel = new JLabel(gifIcon);
             gifLabel.setBounds(0, 0, 400, 300);
             panelAnima.add(gifLabel);
             panelAnima.repaint();
         } else if (bPress == banar) {
             panelAnima.removeAll();
-            ImageIcon gifIcon = new ImageIcon(
-                    "D:\\documentos\\Tercer semestre U\\Programaci\u00F3n\\Miniproyecto4\\Tamagotchi\\Recursos\\Assets\\Sucio.gif");
+            ImageIcon gifIcon = new ImageIcon(controlador.getGIF("banar"));
             JLabel gifLabel = new JLabel(gifIcon);
             gifLabel.setBounds(0, 0, 400, 300);
             panelAnima.add(gifLabel);
             panelAnima.repaint();
         } else if (bPress == volver) {
             panelAnima.removeAll();
-            ImageIcon gifIcon = new ImageIcon(
-                    "D:\\documentos\\Tercer semestre U\\Programaci\u00F3n\\Miniproyecto4\\Tamagotchi\\Recursos\\Assets\\Saludo.gif");
+            // Crea el ImageIcon con la ruta completa del archivo
+            ImageIcon gifIcon = new ImageIcon(controlador.getGIF("saludo"));//gif Saludo
             JLabel gifLabel = new JLabel(gifIcon);
             gifLabel.setBounds(0, 0, 400, 300);
             panelAnima.add(gifLabel);
+
+
             panelAnima.repaint();
             VentanaTag.setVisible(false);
             VentanaIni.setVisible(true);
-
         }
 
     }
