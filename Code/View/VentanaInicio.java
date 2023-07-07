@@ -35,7 +35,9 @@ public class VentanaInicio extends JFrame implements ActionListener {
     Timer timer, timer1;
     Color[] colors = { Color.RED, Color.GREEN, Color.BLUE };
     int colorIndex = 0;
-    Color comparacion, ColorFondo, ColorFuente, ColorFondo2, ColorBoton1;
+
+    Color comparacion, ColorFondo, ColorFuente,ColorFondo2, ColorBoton1;
+
 
     ControladorTamagotchi controlador;
     int a;
@@ -115,7 +117,7 @@ public class VentanaInicio extends JFrame implements ActionListener {
         controlador = new ControladorTamagotchi();
       
         ColorFondo = new Color(252, 249, 221);// 242, 239, 244
-        
+
         ColorFuente = new Color(59, 59, 76);
         ColorFondo2 = new Color(254, 245, 130);
         ColorBoton1 = new Color(233, 187, 55);
@@ -126,38 +128,62 @@ public class VentanaInicio extends JFrame implements ActionListener {
         panelInfo.setBackground(ColorFondo);
 
         titulo = new JLabel("NIVEL ");
-        titulo.setBounds(140, 10, 140, 30);
+        titulo.setBounds(120, 10, 140, 30);
         titulo.setFont(new Font("Comic Sans MS", Font.BOLD, 30));
 
-        hambre = new JLabel("Hambre ");
-        hambre.setBounds(70, 65, 100, 20);
+        nivel = new JLabel(" ");
+        nivel.setBounds(230, 10, 140, 30);
+        nivel.setFont(new Font("Comic Sans MS", Font.BOLD, 30));
+
+        hambre = new JLabel("Hambre: ");
+        hambre.setBounds(45, 65, 100, 20);
         hambre.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
 
-        suciedad = new JLabel("Suciedad ");
-        suciedad.setBounds(70, 105, 80, 20);
+        iHambre = new JLabel("");
+        iHambre.setBounds(120, 65, 100, 20);
+        iHambre.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
+
+        suciedad = new JLabel("Suciedad: ");
+        suciedad.setBounds(40, 105, 90, 20);
         suciedad.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
 
-        sueno = new JLabel("Sueño ");
-        sueno.setBounds(230, 65, 80, 20);
+        iSuciedad = new JLabel("");
+        iSuciedad.setBounds(125, 105, 80, 20);
+        iSuciedad.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
+
+        sueno = new JLabel("Sueño: ");
+        sueno.setBounds(225, 65, 80, 20);
         sueno.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
 
-        entrenamiento = new JLabel("Entrenamiento ");
-        entrenamiento.setBounds(200, 105, 140, 20);
+        iSueno = new JLabel("");
+        iSueno.setBounds(285, 65, 80, 20);
+        iSueno.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
+
+        entrenamiento = new JLabel("Entrenamiento: ");
+        entrenamiento.setBounds(185, 105, 140, 20);
         entrenamiento.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
+
+        iEntrenamiento = new JLabel("");
+        iEntrenamiento.setBounds(315, 105, 140, 20);
+        iEntrenamiento.setFont(new Font("Trebuchet MS", Font.BOLD, 17));
 
         VentanaTag.add(panelInfo);
         panelInfo.add(titulo);
+        panelInfo.add(nivel);
         panelInfo.add(hambre);
+        panelInfo.add(iHambre);
         panelInfo.add(suciedad);
+        panelInfo.add(iSuciedad);
         panelInfo.add(sueno);
+        panelInfo.add(iSueno);
         panelInfo.add(entrenamiento);
+        panelInfo.add(iEntrenamiento);
 
         // Propiedades del panel 2
         panelAnima = new JPanel();
         panelAnima.setBounds(0, 155, 400, 315);
         panelAnima.setLayout(null);
         panelAnima.setBackground(ColorFondo2);
-
 
         ImageIcon gifIcon = new ImageIcon(controlador.getGIF("saludo"));
         JLabel gifLabel = new JLabel(gifIcon);
@@ -223,6 +249,7 @@ public class VentanaInicio extends JFrame implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 titulo.setForeground(getNextColor());
+                nivel.setForeground(getNextColor());
             }
         });
         timer.start();
