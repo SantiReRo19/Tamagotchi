@@ -251,7 +251,8 @@ public class VentanaInicio extends JFrame implements ActionListener {
             VentanaIni.setVisible(false);
             //acá
 
-            if (contadorlistener > 0) {
+            if (contadorlistener == 1) {
+                System.out.println(contadorlistener);
                 //acá se debe implementar la segunda partida
                 int opcion = JOptionPane.showOptionDialog(
                 null, // Componente padre (null para centrar en la pantalla)
@@ -261,18 +262,23 @@ public class VentanaInicio extends JFrame implements ActionListener {
                 JOptionPane.QUESTION_MESSAGE, // Tipo de mensaje (pregunta)
                 null, // Icono personalizado (null para el icono predeterminado)
                 new Object[]{"Nueva partida", "Cargar Partida", "Cancelar"}/*Texto de los botones */,"Si"/*Botón predeterminado */);
-                System.out.println("llegamos al contador >0");
+
+                System.out.println("llegamos al contador ==1");
                 VentanaTag.setVisible(true);
+
                 // Comprobar la opción seleccionada
                 if (opcion == JOptionPane.YES_OPTION) {
                     System.out.println("Se seleccionó nueva partida");
+                    contadorlistener++;
                     // Realizar las acciones
                 } else if (opcion == JOptionPane.NO_OPTION) {
                     System.out.println("Se seleccionó cargar partida");
                     // Realizar las acciones
                 } else if (opcion == JOptionPane.CANCEL_OPTION) {
                     System.out.println("Se seleccionó Cancelar");
-                    // Realizar las acciones
+                    VentanaTag.setVisible(false);
+                    VentanaIni.setVisible(true);
+                    contadorlistener = 1;
                 } else {
                     System.out.println("Se cerró el cuadro de diálogo sin seleccionar ninguna opción");
                     // Realizar acciones cuando se cierra el cuadro de diálogo sin seleccionar ninguna opción
@@ -282,6 +288,35 @@ public class VentanaInicio extends JFrame implements ActionListener {
                 VentPrincipal();
                 System.out.println("hello papu");
                 contadorlistener++;
+            }else if(contadorlistener > 1){
+                System.out.println("llegamos al contador >1");
+                int opcion = JOptionPane.showOptionDialog(
+                null, // Componente padre (null para centrar en la pantalla)
+                "Selecciona una opción:", // Mensaje del cuadro de diálogo
+                "Partidas", // Título del cuadro de diálogo
+                JOptionPane.YES_NO_CANCEL_OPTION, // Tipo de botones (si, No, Cancelar)
+                JOptionPane.QUESTION_MESSAGE, // Tipo de mensaje (pregunta)
+                null, // Icono personalizado (null para el icono predeterminado)
+                new Object[]{"Cargar partida 1", "Cargar Partida 2", "Cancelar"}/*Texto de los botones */,"Si"/*Botón predeterminado */);
+
+                System.out.println("llegamos al contador >1");
+                VentanaTag.setVisible(true);
+
+                // Comprobar la opción seleccionada
+                if (opcion == JOptionPane.YES_OPTION) {
+                    System.out.println("Se seleccionó cargar partida 1");
+                    // Realizar las acciones
+                } else if (opcion == JOptionPane.NO_OPTION) {
+                    System.out.println("Se seleccionó cargar partida 2");
+                    // Realizar las acciones
+                } else if (opcion == JOptionPane.CANCEL_OPTION) {
+                    System.out.println("Se seleccionó Cancelar");
+                    VentanaTag.setVisible(false);
+                    VentanaIni.setVisible(true);
+                } else {
+                    System.out.println("Se cerró el cuadro de diálogo sin seleccionar ninguna opción");
+                    // Realizar acciones cuando se cierra el cuadro de diálogo sin seleccionar ninguna opción
+                } 
             }
 
         } else if (bPress == comer) {
