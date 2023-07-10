@@ -20,11 +20,12 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-public class VentanaInicio extends JFrame implements ActionListener {
+public class VentanaInicio extends JFrame  implements ActionListener {
 
     JFrame VentanaIni = new JFrame();
     JFrame VentanaTag = new JFrame();
@@ -36,6 +37,8 @@ public class VentanaInicio extends JFrame implements ActionListener {
     JLabel titulo, nivel, hambre, iHambre, suciedad, iSuciedad, sueno, iSueno, entrenamiento, iEntrenamiento;
     JButton comer, dormir, entrenar, banar, volver;
     Timer timer, timer1;
+    
+
     Color[] colors = { Color.RED, Color.GREEN, Color.BLUE };
     int colorIndex = 0;
 
@@ -60,10 +63,11 @@ public class VentanaInicio extends JFrame implements ActionListener {
         
     }
 
-    public VentanaInicio(Tamagotchi tamagotchi,Thread Hilo, ControladorTamagotchi controlador) {
+    public VentanaInicio(Tamagotchi tamagotchi,Thread Hilo, ControladorTamagotchi controlador,VentanaInicio ventanaUnica) {
         this.tamagotchi = tamagotchi;
         this.Hilo = Hilo;
         this.controlador = controlador;
+        this.ventInicio = ventanaUnica;
     }
 
     public void VentInicio(){
@@ -316,6 +320,15 @@ public class VentanaInicio extends JFrame implements ActionListener {
         System.out.println("\nOye cuidado con tu animal animal, se esta muriendo de " + gif + "\n");
     }
 
+    public void muerto(String gif) {
+            panelAnima.removeAll();
+            ImageIcon gifIcon = new ImageIcon(controlador.getGIF("morir"));
+            JLabel gifLabel = new JLabel(gifIcon);
+            gifLabel.setBounds(0, 0, 400, 300);
+            panelAnima.add(gifLabel);
+            panelAnima.repaint();
+    }
+
     public void actionPerformed(ActionEvent e) {
         
         controlador = new ControladorTamagotchi();
@@ -349,7 +362,7 @@ public class VentanaInicio extends JFrame implements ActionListener {
                     tamagotchi = new Tamagotchi(controlador);
                     Hilo = new Thread(tamagotchi);
                 
-                    tamagotchi.IniciarTamagotchi(tamagotchi,Hilo, controlador);
+                    tamagotchi.IniciarTamagotchi(tamagotchi,Hilo, controlador,ventInicio);
                     
                     
                     num_partida = 2;
@@ -363,8 +376,8 @@ public class VentanaInicio extends JFrame implements ActionListener {
                     num_partida = 1;
                     System.out.println("Se seleccionó cargar partida");
 
-                    ControladorTamagotchi controlador = new ControladorTamagotchi();
-                    tamagotchi = new Tamagotchi();
+                    ControladorTamagotchi controlador = new ControladorTamagotchi(this);
+                    //tamagotchi = new Tamagotchi();
                     
                     String nombreArchivo = controlador.getPartida1();
 
@@ -377,7 +390,7 @@ public class VentanaInicio extends JFrame implements ActionListener {
                     tamagotchi.setActivacionRun(true);
                     Thread Hilo = new Thread(tamagotchi);
                     
-                    tamagotchi.IniciarTamagotchi(tamagotchi,Hilo,this.controlador );
+                    tamagotchi.IniciarTamagotchi(tamagotchi,Hilo,this.controlador,ventInicio );
 
                     Hilo.start();
                     
@@ -398,8 +411,9 @@ public class VentanaInicio extends JFrame implements ActionListener {
                 controlador = new ControladorTamagotchi(this);
                 tamagotchi = new Tamagotchi(controlador);
                 Hilo = new Thread(tamagotchi);
-                
-                tamagotchi.IniciarTamagotchi(tamagotchi,Hilo, controlador);
+                Autoguardado autoguardado = new Autoguardado(tamagotchi); 
+                autoguardado.start();
+                tamagotchi.IniciarTamagotchi(tamagotchi,Hilo, controlador,ventInicio);
                 
                 
 
@@ -445,7 +459,7 @@ public class VentanaInicio extends JFrame implements ActionListener {
                     tamagotchi.setActivacionRun(true);
                     Thread Hilo = new Thread(tamagotchi);
                     Hilo.start();
-                    tamagotchi.IniciarTamagotchi(tamagotchi,Hilo,this.controlador);
+                    tamagotchi.IniciarTamagotchi(tamagotchi,Hilo,this.controlador,ventInicio);
 
                     
                 } else if (opcion == JOptionPane.NO_OPTION) {
@@ -467,7 +481,7 @@ public class VentanaInicio extends JFrame implements ActionListener {
                     tamagotchi.setActivacionRun(true);
                     Thread Hilo = new Thread(tamagotchi);
                     Hilo.start();
-                    tamagotchi.IniciarTamagotchi(tamagotchi,Hilo,this.controlador);
+                    tamagotchi.IniciarTamagotchi(tamagotchi,Hilo,this.controlador,ventInicio);
 
 
                     // Realizar las acciones
@@ -518,7 +532,8 @@ public class VentanaInicio extends JFrame implements ActionListener {
 
             tamagotchi.banar();
         } else if (bPress == volver) {
-            tamagotchi.IniciarTamagotchi(tamagotchi, Hilo,this.controlador);
+            controlador = new ControladorTamagotchi(this);
+            tamagotchi.IniciarTamagotchi(tamagotchi, Hilo,this.controlador,ventInicio);
             //controlador = new ControladorTamagotchi(this);
             Autoguardado autoguardado = new Autoguardado(tamagotchi);
             

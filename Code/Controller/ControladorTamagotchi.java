@@ -28,9 +28,11 @@ public class ControladorTamagotchi implements Serializable {
     public transient Path dormirGif = projectPath.resolve("Recursos/Assets/Dormir.gif");
     public transient Path banarGif = projectPath.resolve("Recursos/Assets/Sucio.gif");
     public transient Path entrenarGif = projectPath.resolve("Recursos/Assets/Entrenar.gif");
+    public transient Path muertoGif = projectPath.resolve("Recursos/partidas/Muerto.gif");
 
     public transient Path partida1 = projectPath.resolve("Recursos/partidas/partida1.bin");
     public transient Path partida2 = projectPath.resolve("Recursos/partidas/partida2.bin");
+    
 
     
             
@@ -49,6 +51,9 @@ public class ControladorTamagotchi implements Serializable {
             gif = banarGif.toString();
         }else if(a == "entrenar"){
             gif = entrenarGif.toString();
+        }else if(a == "morir"){
+            gif = muertoGif.toString();
+            Morir(gif);
         }
 
         return gif;
@@ -90,6 +95,10 @@ public class ControladorTamagotchi implements Serializable {
     public void setNivel(int nivel) {
         this.nivel = nivel;
         ventanaInicio.setNivel(String.valueOf(nivel));
+    }
+
+    public void Morir(String a){
+        ventanaInicio.muerto(a);
     }
     
     
